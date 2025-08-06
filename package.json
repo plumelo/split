@@ -1,0 +1,103 @@
+{
+  "name": "@nplumelo/split",
+  "version": "1.0.0",
+  "description": "A simple, lightweight web component for resizing two adjacent elements with a draggable divider line",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plumelo/split.git"
+  },
+  "keywords": [
+    "web-components",
+    "split",
+    "resizer",
+    "resize",
+    "pane",
+    "divider",
+    "draggable",
+    "layout",
+    "shadow-dom",
+    "pionjs"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Plumelo/split#readme",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "lint": "tsc && eslint --cache .",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "npm run storybook:start",
+    "dev": "npm run storybook:start",
+    "test": "wtr --coverage",
+    "test:watch": "wtr --watch",
+    "storybook:start": "storybook dev -p 8000",
+    "storybook:build": "storybook build",
+    "storybook:deploy": "storybook-to-ghpages",
+    "storybook:preview": "npm run storybook:build && http-server ./storybook-static/ --silent",
+    "prepare": "husky"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/github",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "branch": "main",
+    "preset": "conventionalcommits"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "body-max-line-length": [
+        1,
+        "always",
+        100
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./component": "./dist/split.js"
+  },
+  "dependencies": {
+    "@pionjs/pion": "^2.5.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@neovici/cfg": "^1.53.0",
+    "@open-wc/testing": "^4.0.0",
+    "@semantic-release/changelog": "^6.0.0",
+    "@semantic-release/git": "^10.0.0",
+    "@storybook/addon-essentials": "^7.6.19",
+    "@storybook/addon-links": "^7.6.19",
+    "@storybook/builder-vite": "7.6.17",
+    "@storybook/storybook-deployer": "^2.8.16",
+    "@storybook/web-components": "7.6.17",
+    "@storybook/web-components-vite": "^7.6.20",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.12.13",
+    "@web/storybook-builder": "^0.1.16",
+    "@web/storybook-framework-web-components": "^0.1.2",
+    "esbuild": "^0.21.4",
+    "http-server": "^14.1.1",
+    "husky": "^9.0.11",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "semantic-release": "^23.1.1",
+    "storybook": "^7.6.19",
+    "typescript": "^5.4.5"
+  }
+}
