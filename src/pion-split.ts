@@ -6,6 +6,8 @@ import { ResizerDirection } from './resizers'
 const PionSplit = (host: PionSplitElement) => {
   const [, setIsDragging] = useState(false)
 
+  let hasTouch = false
+
   const getDirection = (): ResizerDirection => {
     if (host.resizer && 'direction' in host.resizer) {
       return host.resizer.direction
@@ -21,11 +23,11 @@ const PionSplit = (host: PionSplitElement) => {
 
   useEffect(() => {
     host.addEventListener('mousedown', handleMouseDown)
-    // host.addEventListener('touchstart', handleMouseDown)
+    host.addEventListener('touchstart', handleTouchStart)
 
     return () => {
       host.removeEventListener('mousedown', handleMouseDown)
-      // host.removeEventListener('touchstart', handleMouseDown)
+      host.removeEventListener('touchstart', handleTouchStart)
     }
   }, [])
 
@@ -68,7 +70,17 @@ const PionSplit = (host: PionSplitElement) => {
     }
   }
 
-  const handleMouseDown = (e: MouseEvent | TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent) => {
+    hasTouch = true
+    handlePointerDown(e)
+  }
+
+  const handleMouseDown = (e: MouseEvent) => {
+    if (hasTouch) return
+    handlePointerDown(e)
+  }
+
+  const handlePointerDown = (e: MouseEvent | TouchEvent) => {
     e.preventDefault()
     const mousePosition = getMousePosition(e)
 
@@ -82,12 +94,12 @@ const PionSplit = (host: PionSplitElement) => {
       })
     )
 
-    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       const mousePosition = getMousePosition(e)
       handleResize(mousePosition)
     }
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       setIsDragging(false)
       host.removeAttribute('data-dragging')
 
@@ -98,16 +110,16 @@ const PionSplit = (host: PionSplitElement) => {
         })
       )
 
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('touchmove', handleMouseMove)
-      document.removeEventListener('touchend', handleMouseUp)
+      document.removeEventListener('mousemove', handlePointerMove)
+      document.removeEventListener('mouseup', handlePointerUp)
+      document.removeEventListener('touchmove', handlePointerMove)
+      document.removeEventListener('touchend', handlePointerUp)
     }
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('touchmove', handleMouseMove)
-    document.addEventListener('touchend', handleMouseUp)
+    document.addEventListener('mousemove', handlePointerMove)
+    document.addEventListener('mouseup', handlePointerUp)
+    document.addEventListener('touchmove', handlePointerMove)
+    document.addEventListener('touchend', handlePointerUp)
   }
 
   return html`
