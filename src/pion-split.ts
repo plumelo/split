@@ -123,7 +123,6 @@ const PionSplit = (host: PionSplitElement) => {
       :host([data-direction='horizontal']) {
         min-height: 100%;
         width: 4px;
-        height: 4px;
         cursor: col-resize;
       }
 
@@ -131,8 +130,6 @@ const PionSplit = (host: PionSplitElement) => {
         height: 4px;
         width: 100%;
         cursor: row-resize;
-        min-height: auto;
-        min-width: 100%;
       }
 
       :host(:hover) {
@@ -141,6 +138,7 @@ const PionSplit = (host: PionSplitElement) => {
 
       :host([data-dragging]) {
         background: #007acc;
+        cursor: grabbing;
       }
     </style>
   `

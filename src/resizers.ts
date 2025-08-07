@@ -5,7 +5,7 @@ export type ResizerDirection = 'horizontal' | 'vertical'
 
 export interface ResizerConfig {
   direction: ResizerDirection
-  onResize?: (mousePosition: MousePosition) => void
+  onResize?: (data: { previousSize: string; nextSize: string }) => void
 }
 
 export interface PanelSizes {
@@ -15,8 +15,8 @@ export interface PanelSizes {
 
 export interface ResizerFunction {
   (mousePosition: MousePosition, elements: ResizerElements): PanelSizes | null
-  direction: 'horizontal' | 'vertical'
-  onResize?: (mousePosition: MousePosition) => void
+  direction: ResizerDirection
+  onResize?: (data: { previousSize: string; nextSize: string }) => void
 }
 
 export const resizeElement = (config: ResizerConfig): ResizerFunction => {
@@ -50,11 +50,12 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
       next.style.height = nextSize
     }
 
-    // Call the onResize callback
-    onResize?.(mousePosition)
+    onResize?.({
+      previousSize: `${percentage}%`,
+      nextSize: `${100 - percentage}%`
+    })
 
     return {
-      percentage,
       previousSize: `${percentage}%`,
       nextSize: `${100 - percentage}%`
     }

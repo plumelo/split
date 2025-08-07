@@ -1,10 +1,19 @@
-import { component, html } from '@pionjs/pion'
+import { component, html, useState } from '@pionjs/pion'
 import { resizeElement } from '../src/index'
 import '../src/index'
 
 const BasicDemo = () => {
+  const [leftPanelSize, setLeftPanelSize] = useState()
+  const [rightPanelSize, setRightPanelSize] = useState()
+
+  const onResize = ({ previousSize, nextSize }) => {
+    setLeftPanelSize(previousSize)
+    setRightPanelSize(nextSize)
+  }
+
   const horizontalResizer = resizeElement({
-    direction: 'horizontal'
+    direction: 'horizontal',
+    onResize
   })
 
   return html`
@@ -54,6 +63,11 @@ const BasicDemo = () => {
     </style>
 
     <h1>Pion Split Demo - Horizontal Split</h1>
+
+    <div class="stats">
+      <p>Left Panel Size: ${leftPanelSize || '50%'}</p>
+      <p>Right Panel Size: ${rightPanelSize || '50%'}</p>
+    </div>
 
     <div class="container">
       <div class="panel left-panel">

@@ -1,10 +1,19 @@
-import { component, html } from '@pionjs/pion'
+import { component, html, useState } from '@pionjs/pion'
 import { resizeElement } from '../src/index'
 import '../src/index'
 
 const VerticalDemo = () => {
+  const [topPanelSize, setTopPanelSize] = useState()
+  const [bottomPanelSize, setBottomPanelSize] = useState()
+
+  const onResize = ({ previousSize, nextSize }) => {
+    setTopPanelSize(previousSize)
+    setBottomPanelSize(nextSize)
+  }
+
   const verticalResizer = resizeElement({
-    direction: 'vertical'
+    direction: 'vertical',
+    onResize
   })
 
   return html`
@@ -15,13 +24,12 @@ const VerticalDemo = () => {
         height: 600px;
         width: 600px;
         border: 1px solid #ccc;
-        margin: 20px;
       }
 
       .panel {
         background: #f5f5f5;
-        border: 1px solid #ddd;
         padding: 20px;
+        border: 1px solid #ddd;
         overflow: auto;
         display: flex;
         align-items: center;
@@ -29,6 +37,14 @@ const VerticalDemo = () => {
         font-family: Arial, sans-serif;
         width: 100%;
         height: 100%;
+      }
+
+      .stats {
+        margin: 20px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        font-family: monospace;
       }
 
       .top-panel {
@@ -48,6 +64,11 @@ const VerticalDemo = () => {
     </style>
 
     <h1>Pion Split Demo - Vertical Split</h1>
+
+    <div class="stats">
+      <p>Top Panel Size: ${topPanelSize || '50%'}</p>
+      <p>Bottom Panel Size: ${bottomPanelSize || '50%'}</p>
+    </div>
 
     <div class="container">
       <div class="panel top-panel">
