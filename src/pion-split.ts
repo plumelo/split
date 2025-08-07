@@ -1,13 +1,6 @@
 import { component, html, useState, useEffect } from '@pionjs/pion'
 import { getMousePosition, MousePosition } from './utils'
-import { ResizerFunction } from './resizers'
-
-export interface PionSplitElement extends HTMLElement, PionSplitProps {}
-
-export interface PionSplitProps {
-  resizer?: ResizerFunction
-  onResize?: (mousePosition: MousePosition, percentage: number) => void
-}
+import { PionSplitElement } from './types'
 
 const PionSplit = (host: PionSplitElement) => {
   const [, setIsDragging] = useState(false)
@@ -35,18 +28,15 @@ const PionSplit = (host: PionSplitElement) => {
     const elements = getElements()
     if (!elements || !host.resizer) return
 
-    const result = host.resizer(mousePosition, elements)
+    const panelSizes = host.resizer(mousePosition, elements)
 
-    if (result) {
-      host.onResize?.(mousePosition, result.percentage)
-
+    if (panelSizes) {
       host.dispatchEvent(
         new CustomEvent('resize', {
           detail: {
             mousePosition,
-            percentage: result.percentage,
-            previousSize: result.previousSize,
-            nextSize: result.nextSize
+            previousSize: panelSizes.previousSize,
+            nextSize: panelSizes.nextSize
           },
           bubbles: true
         })
@@ -98,11 +88,11 @@ const PionSplit = (host: PionSplitElement) => {
 
   useEffect(() => {
     host.addEventListener('mousedown', handleMouseDown)
-    host.addEventListener('touchstart', handleMouseDown)
+    // host.addEventListener('touchstart', handleMouseDown)
 
     return () => {
       host.removeEventListener('mousedown', handleMouseDown)
-      host.removeEventListener('touchstart', handleMouseDown)
+      // host.removeEventListener('touchstart', handleMouseDown)
     }
   }, [])
 

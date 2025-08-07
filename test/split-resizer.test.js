@@ -1,11 +1,10 @@
 import { expect, fixture, html } from '@open-wc/testing'
 import '../src/index'
-import { resizeSplitPanels, getAdjacentElements } from '../src/index'
 
-describe('split-resizer', () => {
-  it('should create a split-resizer element', async () => {
-    const el = await fixture(html`<split-resizer></split-resizer>`)
+describe('pion-split', () => {
+  it('should create a pion-split element', async () => {
+    const el = await fixture(html`<pion-split></pion-split>`)
     expect(el).to.exist
-    expect(el.tagName).to.equal('SPLIT-RESIZER')
+    expect(el.tagName.toLowerCase()).to.equal('pion-split')
   })
 })

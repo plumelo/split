@@ -1,34 +1,25 @@
 import { MousePosition } from './utils'
+import { ResizerElements } from './types'
 
 export interface ResizerConfig {
   direction: 'horizontal' | 'vertical'
-  onResize?: (mousePosition: MousePosition, percentage: number) => void
-  customResize?: (
-    previous: HTMLElement,
-    next: HTMLElement,
-    percentage: number
-  ) => void
+  onResize?: (mousePosition: MousePosition) => void
 }
 
-export interface ResizerFunction {
-  (
-    mousePosition: MousePosition,
-    elements: {
-      previous: HTMLElement
-      next: HTMLElement
-      container: HTMLElement
-    }
-  ): {
-    percentage: number
-    previousSize: string
-    nextSize: string
-  } | null
+export interface PanelSizes {
+  previousSize: string
+  nextSize: string
 }
+
+export type ResizerFunction = (
+  mousePosition: MousePosition,
+  elements: ResizerElements
+) => PanelSizes | null
 
 export const resizeElement = (config: ResizerConfig): ResizerFunction => {
   return (mousePosition: MousePosition, elements) => {
     const { previous, next, container } = elements
-    const { direction, onResize, customResize } = config
+    const { direction, onResize } = config
 
     const containerRect = container.getBoundingClientRect()
 
@@ -45,25 +36,19 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
     // Clamp percentage between 0 and 100
     percentage = Math.max(0, Math.min(100, percentage))
 
-    if (customResize) {
-      // Use custom resize logic
-      customResize(previous, next, percentage)
-    } else {
-      // Default resize logic
-      const previousSize = `${percentage}%`
-      const nextSize = `${100 - percentage}%`
+    const previousSize = `${percentage}%`
+    const nextSize = `${100 - percentage}%`
 
-      if (direction === 'horizontal') {
-        previous.style.width = previousSize
-        next.style.width = nextSize
-      } else {
-        previous.style.height = previousSize
-        next.style.height = nextSize
-      }
+    if (direction === 'horizontal') {
+      previous.style.width = previousSize
+      next.style.width = nextSize
+    } else {
+      previous.style.height = previousSize
+      next.style.height = nextSize
     }
 
     // Call the onResize callback
-    onResize?.(mousePosition, percentage)
+    onResize?.(mousePosition)
 
     return {
       percentage,
@@ -71,20 +56,4 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
       nextSize: `${100 - percentage}%`
     }
   }
-}
-
-export const resizers = {
-  horizontal: (onResize?: ResizerConfig['onResize']) =>
-    resizeElement({
-      direction: 'horizontal',
-      onResize
-    }),
-
-  vertical: (onResize?: ResizerConfig['onResize']) =>
-    resizeElement({
-      direction: 'vertical',
-      onResize
-    }),
-
-  custom: (config: ResizerConfig) => resizeElement(config)
 }

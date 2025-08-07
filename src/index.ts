@@ -1,2 +1,2 @@
-import './pion-split'
+export * from './pion-split'
 export * from './resizers'
