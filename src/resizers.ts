@@ -1,8 +1,10 @@
 import { MousePosition } from './utils'
 import { ResizerElements } from './types'
 
+export type ResizerDirection = 'horizontal' | 'vertical'
+
 export interface ResizerConfig {
-  direction: 'horizontal' | 'vertical'
+  direction: ResizerDirection
   onResize?: (mousePosition: MousePosition) => void
 }
 
@@ -11,13 +13,14 @@ export interface PanelSizes {
   nextSize: string
 }
 
-export type ResizerFunction = (
-  mousePosition: MousePosition,
-  elements: ResizerElements
-) => PanelSizes | null
+export interface ResizerFunction {
+  (mousePosition: MousePosition, elements: ResizerElements): PanelSizes | null
+  direction: 'horizontal' | 'vertical'
+  onResize?: (mousePosition: MousePosition) => void
+}
 
 export const resizeElement = (config: ResizerConfig): ResizerFunction => {
-  return (mousePosition: MousePosition, elements) => {
+  const resizer = (mousePosition: MousePosition, elements: ResizerElements) => {
     const { previous, next, container } = elements
     const { direction, onResize } = config
 
@@ -56,4 +59,10 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
       nextSize: `${100 - percentage}%`
     }
   }
+
+  // Attach config properties directly to the function
+  resizer.direction = config.direction
+  resizer.onResize = config.onResize
+
+  return resizer as ResizerFunction
 }

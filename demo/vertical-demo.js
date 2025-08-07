@@ -2,16 +2,17 @@ import { component, html } from '@pionjs/pion'
 import { resizeElement } from '../src/index'
 import '../src/index'
 
-const BasicDemo = () => {
-  const horizontalResizer = resizeElement({
-    direction: 'horizontal'
+const VerticalDemo = () => {
+  const verticalResizer = resizeElement({
+    direction: 'vertical'
   })
 
   return html`
     <style>
       .container {
         display: flex;
-        height: 400px;
+        flex-direction: column;
+        height: 600px;
         width: 600px;
         border: 1px solid #ccc;
         margin: 20px;
@@ -26,25 +27,18 @@ const BasicDemo = () => {
         align-items: center;
         justify-content: center;
         font-family: Arial, sans-serif;
-        width: 50%;
+        width: 100%;
+        height: 100%;
       }
 
-      .left-panel {
+      .top-panel {
         background: linear-gradient(45deg, #ff6b6b, #ffa726);
         color: white;
       }
 
-      .right-panel {
+      .bottom-panel {
         background: linear-gradient(45deg, #4ecdc4, #45b7d1);
         color: white;
-      }
-
-      .stats {
-        margin: 20px;
-        padding: 10px;
-        background: #f9f9f9;
-        border-radius: 4px;
-        font-family: monospace;
       }
 
       h1 {
@@ -53,20 +47,20 @@ const BasicDemo = () => {
       }
     </style>
 
-    <h1>Pion Split Demo - Horizontal Split</h1>
+    <h1>Pion Split Demo - Vertical Split</h1>
 
     <div class="container">
-      <div class="panel left-panel">
+      <div class="panel top-panel">
         <div>
-          <h3>Left Panel</h3>
+          <h3>Top Panel</h3>
         </div>
       </div>
 
-      <pion-split .resizer=${horizontalResizer}></pion-split>
+      <pion-split .resizer=${verticalResizer}></pion-split>
 
-      <div class="panel right-panel">
+      <div class="panel bottom-panel">
         <div>
-          <h3>Right Panel</h3>
+          <h3>Bottom Panel</h3>
         </div>
       </div>
     </div>
@@ -74,6 +68,6 @@ const BasicDemo = () => {
 }
 
 customElements.define(
-  'basic-demo',
-  component(BasicDemo, { useShadowDOM: true })
+  'vertical-demo',
+  component(VerticalDemo, { useShadowDOM: true })
 )
