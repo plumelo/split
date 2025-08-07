@@ -4,8 +4,6 @@ import { PionSplitElement } from './types'
 import { ResizerDirection } from './resizers'
 
 const PionSplit = (host: PionSplitElement) => {
-  const [, setIsDragging] = useState(false)
-
   let hasTouch = false
 
   const getDirection = (): ResizerDirection => {
@@ -84,7 +82,6 @@ const PionSplit = (host: PionSplitElement) => {
     e.preventDefault()
     const mousePosition = getMousePosition(e)
 
-    setIsDragging(true)
     host.setAttribute('data-dragging', 'true')
 
     host.dispatchEvent(
@@ -100,7 +97,6 @@ const PionSplit = (host: PionSplitElement) => {
     }
 
     const handlePointerUp = () => {
-      setIsDragging(false)
       host.removeAttribute('data-dragging')
 
       host.dispatchEvent(
