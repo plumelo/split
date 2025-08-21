@@ -1,10 +1,10 @@
 import { ResizerFunction } from './resizers'
 
-export interface PionSplitElement extends HTMLElement, PionSplitProps {}
-
 export interface PionSplitProps {
   resizer?: ResizerFunction
 }
+
+export interface PionSplitElement extends HTMLElement, PionSplitProps {}
 
 export interface ResizerElements {
   previous: HTMLElement

@@ -1,7 +1,8 @@
-import { component, html, useState, useEffect } from '@pionjs/pion'
+import { component, html, useEffect } from '@pionjs/pion'
 import { getMousePosition, MousePosition } from './utils'
 import { PionSplitElement } from './types'
 import { ResizerDirection } from './resizers'
+import { styles } from './pion-split.css'
 
 const PionSplit = (host: PionSplitElement) => {
   let hasTouch = false
@@ -13,21 +14,6 @@ const PionSplit = (host: PionSplitElement) => {
 
     return 'horizontal'
   }
-
-  useEffect(() => {
-    const direction = getDirection()
-    host.setAttribute('data-direction', direction)
-  }, [host.resizer])
-
-  useEffect(() => {
-    host.addEventListener('mousedown', handleMouseDown)
-    host.addEventListener('touchstart', handleTouchStart)
-
-    return () => {
-      host.removeEventListener('mousedown', handleMouseDown)
-      host.removeEventListener('touchstart', handleTouchStart)
-    }
-  }, [])
 
   const getElements = () => {
     const parent = host.parentElement
@@ -66,16 +52,6 @@ const PionSplit = (host: PionSplitElement) => {
         })
       )
     }
-  }
-
-  const handleTouchStart = (e: TouchEvent) => {
-    hasTouch = true
-    handlePointerDown(e)
-  }
-
-  const handleMouseDown = (e: MouseEvent) => {
-    if (hasTouch) return
-    handlePointerDown(e)
   }
 
   const handlePointerDown = (e: MouseEvent | TouchEvent) => {
@@ -118,38 +94,39 @@ const PionSplit = (host: PionSplitElement) => {
     document.addEventListener('touchend', handlePointerUp)
   }
 
-  return html`
-    <style>
-      :host {
-        display: block;
-        background: #e0e0e0;
-        user-select: none;
-        position: relative;
-        z-index: 1;
-      }
+  const handleTouchStart = (e: TouchEvent) => {
+    hasTouch = true
+    handlePointerDown(e)
+  }
 
-      :host([data-direction='horizontal']) {
-        min-height: 100%;
-        width: 4px;
-        cursor: col-resize;
-      }
+  const handleMouseDown = (e: MouseEvent) => {
+    if (hasTouch) return
+    handlePointerDown(e)
+  }
 
-      :host([data-direction='vertical']) {
-        height: 4px;
-        width: 100%;
-        cursor: row-resize;
-      }
+  useEffect(() => {
+    const direction = getDirection()
+    host.setAttribute('data-direction', direction)
+  }, [host.resizer])
 
-      :host(:hover) {
-        background: #ccc;
-      }
+  useEffect(() => {
+    host.addEventListener('mousedown', handleMouseDown)
+    host.addEventListener('touchstart', handleTouchStart)
 
-      :host([data-dragging]) {
-        background: #007acc;
-        cursor: grabbing;
-      }
-    </style>
-  `
+    return () => {
+      host.removeEventListener('mousedown', handleMouseDown)
+      host.removeEventListener('touchstart', handleTouchStart)
+    }
+  }, [])
+
+  return html``
 }
 
-customElements.define('pion-split', component(PionSplit))
+customElements.define(
+  'pion-split',
+  component(PionSplit, {
+    styleSheets: [styles]
+  })
+)
+
+export { PionSplit }

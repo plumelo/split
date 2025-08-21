@@ -1,6 +1,5 @@
 import { expect, fixture, html, waitUntil } from '@open-wc/testing'
 import { resizeElement } from '../src/index'
-import '../src/index'
 
 describe('pion-split', () => {
   it('should create a pion-split element', async () => {

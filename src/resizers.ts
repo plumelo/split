@@ -20,12 +20,11 @@ export interface ResizerFunction {
 }
 
 export const resizeElement = (config: ResizerConfig): ResizerFunction => {
-  const resizer = (mousePosition: MousePosition, elements: ResizerElements) => {
-    const { previous, next, container } = elements
-    const { direction, onResize } = config
-
-    const containerRect = container.getBoundingClientRect()
-
+  const calculatePercentage = (
+    mousePosition: MousePosition,
+    containerRect: DOMRect,
+    direction: ResizerDirection
+  ): number => {
     let percentage: number
 
     if (direction === 'horizontal') {
@@ -36,9 +35,15 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
         ((mousePosition.y - containerRect.top) / containerRect.height) * 100
     }
 
-    // Clamp percentage between 0 and 100
-    percentage = Math.max(0, Math.min(100, percentage))
+    return Math.max(0, Math.min(100, percentage))
+  }
 
+  const applyStyles = (
+    previous: HTMLElement,
+    next: HTMLElement,
+    direction: ResizerDirection,
+    percentage: number
+  ) => {
     const previousSize = `${percentage}%`
     const nextSize = `${100 - percentage}%`
 
@@ -49,16 +54,29 @@ export const resizeElement = (config: ResizerConfig): ResizerFunction => {
       previous.style.height = previousSize
       next.style.height = nextSize
     }
+  }
 
-    onResize?.({
-      previousSize: `${percentage}%`,
-      nextSize: `${100 - percentage}%`
-    })
+  const resizer = (mousePosition: MousePosition, elements: ResizerElements) => {
+    const { previous, next, container } = elements
+    const { direction, onResize } = config
 
-    return {
+    const containerRect = container.getBoundingClientRect()
+    const percentage = calculatePercentage(
+      mousePosition,
+      containerRect,
+      direction
+    )
+
+    applyStyles(previous, next, direction, percentage)
+
+    const panelSizes = {
       previousSize: `${percentage}%`,
       nextSize: `${100 - percentage}%`
     }
+
+    onResize?.(panelSizes)
+
+    return panelSizes
   }
 
   // Attach config properties directly to the function

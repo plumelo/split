@@ -1,6 +1,5 @@
 import { component, html, useState } from '@pionjs/pion'
 import { resizeElement } from '../src/index'
-import '../src/index'
 
 const BasicDemo = () => {
   const [leftPanelSize, setLeftPanelSize] = useState()

@@ -1,6 +1,5 @@
 import { component, html } from '@pionjs/pion'
 import { resizeElement } from '../src/index'
-import '../src/index'
 
 const MultiplePanels = () => {
   const horizontalResizer = resizeElement({
