@@ -1,17 +1,6 @@
-import { esbuildPlugin } from '@web/dev-server-esbuild'
+import cfg from '@neovici/cfg/web/test-runner.mjs';
 
 export default {
-  files: 'test/**/*.test.js',
-  nodeResolve: true,
-  plugins: [
-    esbuildPlugin({
-      ts: true,
-      target: 'auto'
-    })
-  ],
-  testFramework: {
-    config: {
-      timeout: 5000
-    }
-  }
-}
+	...cfg,
+	testFramework: { config: { ui: 'bdd' }},
+};

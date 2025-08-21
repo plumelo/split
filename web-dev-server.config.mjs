@@ -1,14 +1,6 @@
-import { fromRollup } from '@web/dev-server-rollup'
-import { esbuildPlugin } from '@web/dev-server-esbuild'
-
-const esbuild = fromRollup(esbuildPlugin)
+import cfg from '@neovici/cfg/web/dev-server.mjs';
 
 export default {
-  nodeResolve: true,
-  plugins: [
-    esbuild({
-      ts: true,
-      target: 'esnext'
-    })
-  ]
-}
+	...cfg,
+	plugins: [...cfg.plugins],
+};
